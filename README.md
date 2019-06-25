@@ -1,24 +1,25 @@
-# README
+# このアプリについて
+　このアプリは「コミュニティサイクル」を自動で予約することを補助するものである
+　なお、このアプリは期間限定にて公開しているものであり、公開する目的を達成したら非公開とする
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+---以下作成の背景 
+## 課題
+- 毎朝通勤に利用している「コミュニティサイクル」は通勤ラッシュ時には自転車の予約がしづらい
+- 最寄りの自転車ポートに自転車がなかった場合、他のポートを調べるのが手間
 
-Things you may want to cover:
+## 課題の解決
+- 自転車がなくなる前に予約ができるように、定時で自動予約ができるようにしたい
+- もし、定時の予約が通らなかったら周辺のポートの自転車残数を一覧で見たい
+- 周辺のポートに自転車がある場合は一覧画面から予約ができるようにしたい
+- 自動予約を走らせる時間を効率化させたいので、周辺のポートの自転車が何時になくなるのかを把握したい
 
-* Ruby version
+## 使う技術
+- rails & mysql
+使い慣れているので実装スピードが早いため
+- selenium（ruby）
+自動予約はchromeをheadlessモードにしてブラウザの自動操作にて行う
+- heroku & heroku scheduler
+無料であるから
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## もうできていること
+- かねてよりseleniumスクリプトで最寄りのポートの自転車を予約するスクリプトはできており、運用している
