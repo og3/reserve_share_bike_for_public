@@ -52,6 +52,7 @@ namespace :reserve_bike do
         driver.find_element(:xpath, '//*[@id="cycBtnTab_0"]').send_keys(:enter)
       rescue Selenium::WebDriver::Error::NoSuchElementError
         puts "自転車が存在しませんでした"
+        NotificationMailer.send_reseve_fail("自転車が存在しませんでした").deliver
         driver.quit
         exit
       end
@@ -60,6 +61,7 @@ namespace :reserve_bike do
       driver.quit
     else
       puts "時間外により終了します"
+      NotificationMailer.send_reseve_fail("自転車が存在しませんでした").deliver
     end
   end
 end
