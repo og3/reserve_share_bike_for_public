@@ -3,7 +3,7 @@ namespace :reserve_bike do
     require 'selenium-webdriver'
 
     week_day = [1,2,3,4,5].include?(Time.current.wday)
-    morning_execution_time_1 = (week_day && 7 == Time.current.hour && (40..49).include?(Time.current.min))
+    morning_execution_time_1 = (week_day && 7 == Time.current.hour && (45..59).include?(Time.current.min))
     morning_execution_time_2 = (week_day && 8 == Time.current.hour && (0..9).include?(Time.current.min))
     evening_execution_time = (week_day && 18 == Time.current.hour && (0..59).include?(Time.current.min))
 
@@ -51,8 +51,7 @@ namespace :reserve_bike do
       begin
         driver.find_element(:xpath, '//*[@id="cycBtnTab_0"]').send_keys(:enter)
       rescue Selenium::WebDriver::Error::NoSuchElementError
-        puts "自転車が存在しませんでした"
-        NotificationMailer.send_reseve_fail("自転車が存在しませんでした").deliver
+        NotificationMailer.send_has_bike_ports.deliver
         driver.quit
         exit
       end
@@ -61,7 +60,6 @@ namespace :reserve_bike do
       driver.quit
     else
       puts "時間外により終了します"
-      NotificationMailer.send_reseve_fail("自転車が存在しませんでした").deliver
     end
   end
 end

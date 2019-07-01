@@ -1,0 +1,12 @@
+<% if @researchs.blank? %>
+周辺のポートに予約可能な自転車はありませんでした
+
+<% else %>
+  予約が失敗しました
+
+  周辺のポートの予約状況
+  <% @researchs.each do |research| %>
+    <%= research.port_name %> : <%= research.reft_bikes %>台
+    <%= ENV["RESERVE_URL"] %><%= research.port_code %>
+  <% end %>
+<% end %>

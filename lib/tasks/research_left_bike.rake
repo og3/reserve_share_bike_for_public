@@ -23,6 +23,14 @@ namespace :research_left_bike do
       sleep 2
       # データ収集
       texts = []
+      # 再予約用の文字列（いずれもっとかっこよく。。）
+      ports = {
+        "B1-11.浜町川緑道" => "hamachogawa",
+        "B1-18.セブン-イレブン 日本橋小網町店" => "seveneleven_koamicho",
+        "B1-10.箱崎川第二公園" => "hakozakigawa",
+        "B1-08.明治座" => "meijiza",
+        "B1-15.ロイヤルパークホテル" => "royalparkhotel"
+      }
       # 浜町川緑道
       texts << driver.find_element(:xpath, '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[5]/div/div/a').text
       # セブンイレブン日本橋小網町
@@ -33,13 +41,13 @@ namespace :research_left_bike do
       texts << driver.find_element(:xpath, '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[4]/div/div/a').text
       # ロイヤルパークホテル
       texts << driver.find_element(:xpath, '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[6]/div/div/a').text
-      puts texts
       texts.each do |text|
         port_name = text.split("\n")[0]
         reft_bikes = text.split("\n")[2]
+        port_code = ports[port_name]
         research_at = Time.current.strftime("%Y-%m-%d %H:%M")
         research_wday = Time.current.wday
-        Research.create(port_name: port_name, reft_bikes: reft_bikes, research_at: research_at, research_wday: research_wday)
+        Research.create(port_name: port_name, reft_bikes: reft_bikes, research_at: research_at, research_wday: research_wday, port_code: port_code)
       end
       puts "全ての動作が正常に行われました"
       # ブラウザを終了
