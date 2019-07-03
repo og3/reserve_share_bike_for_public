@@ -6,7 +6,7 @@
 
   周辺のポートの予約状況
   <% @researchs.each do |research| %>
-    <%= research.port_name %> : <%= research.reft_bikes %>台
+    <%= research.port_name %> : <%= research.reft_bikes %>台 : <%= research.research_at %>
     <%= ENV["RESERVE_URL"] %><%= research.port_code %>
   <% end %>
 <% end %>
