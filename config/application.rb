@@ -13,6 +13,6 @@ module ReserveShareBikeForPublic
     # -- all .rb files in that directory are automatically loaded.
     config.time_zone = 'Tokyo'
     # 自作クラスの読み込み
-    config.autoload_paths += %W(#{config.root}/lib)
+    config.paths.add 'lib', eager_load: true
   end
 end
