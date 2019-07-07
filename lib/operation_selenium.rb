@@ -2,6 +2,13 @@ class OperationSelenium
   require 'selenium-webdriver'
 
   @@driver
+  PORT_LIST = {
+      "hamachogawa" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[5]/div/div/a',
+      "seveneleven_koamicho" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[7]/div/div/a',
+      "hakozakigawa" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[5]/div/div/a',
+      "meijiza" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[4]/div/div/a',
+      "royalparkhotel" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[6]/div/div/a'
+    }
 
   def self.starting_headless_chrome
     options = Selenium::WebDriver::Chrome::Options.new
@@ -22,7 +29,6 @@ class OperationSelenium
       @@driver.find_element(:xpath, '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/form[1]/div/a').click
     # すでに予約されている場合は選べないのでブラウザを終了させる
     rescue Selenium::WebDriver::Error::NoSuchElementError
-      puts "自転車はすでに予約されています"
       @@driver.quit
       exit
     end
@@ -34,15 +40,20 @@ class OperationSelenium
   end
 
   def self.select_port(port_key)
-    ports = {
-      "hamachogawa" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[5]/div/div/a',
-      "seveneleven_koamicho" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[7]/div/div/a',
-      "hakozakigawa" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[5]/div/div/a',
-      "meijiza" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[4]/div/div/a',
-      "royalparkhotel" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[6]/div/div/a'
-    }
-    @@driver.find_element(:xpath, ports[port_key]).click
+    @@driver.find_element(:xpath, PORT_LIST[port_key]).click
     sleep 2
+  end
+
+  def self.research_left_bike
+    PORT_LIST.each do |key, value|
+      info = @@driver.find_element(:xpath, value).text
+      port_name = info.split("\n")[0]
+      reft_bikes = info.split("\n")[2]
+      port_code = key
+      research_at = Time.current.strftime("%Y-%m-%d %H:%M")
+      research_wday = Time.current.wday
+      Research.create(port_name: port_name, reft_bikes: reft_bikes, research_at: research_at, research_wday: research_wday, port_code: port_code)
+    end
   end
 
   def self.select_bike
@@ -50,13 +61,13 @@ class OperationSelenium
     begin
       @@driver.find_element(:xpath, '//*[@id="cycBtnTab_0"]').send_keys(:enter)
     rescue Selenium::WebDriver::Error::NoSuchElementError
-      puts "自転車が存在しませんでした"
-      NotificationMailer.send_faild_or_error_info("自転車が存在しませんでした").deliver
+      NotificationMailer.send_has_bike_ports.deliver
       @@driver.quit
       exit
     end
-    sleep 2
-    # ブラウザを終了
+  end
+
+  def self.quit_driver
     @@driver.quit
   end
 end
