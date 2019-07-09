@@ -7,7 +7,8 @@ class OperationSelenium
       "seveneleven_koamicho" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[7]/div/div/a',
       "hakozakigawa" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[5]/div/div/a',
       "meijiza" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[4]/div/div/a',
-      "royalparkhotel" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[6]/div/div/a'
+      "royalparkhotel" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[2]/form[6]/div/div/a',
+      "ginzasquea" => '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[2]/div/div/a'
     }
 
   def self.starting_headless_chrome
@@ -24,7 +25,7 @@ class OperationSelenium
     @@driver.find_element(:name, 'Password').send_keys(:enter)
   end
 
-  def self.get_to_port_list_in_chuouku
+  def self.get_to_port_list_in_chuouku(id, value)
     begin
       @@driver.find_element(:xpath, '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/form[1]/div/a').click
     # すでに予約されている場合は選べないのでブラウザを終了させる
@@ -33,9 +34,8 @@ class OperationSelenium
       exit
     end
     sleep 2
-    # プルダウンから中央区を選択
-    select = Selenium::WebDriver::Support::Select.new(@@driver.find_element(:id, 'AreaID'))
-    select.select_by(:value, '2')
+    select = Selenium::WebDriver::Support::Select.new(@@driver.find_element(:id, id))
+    select.select_by(:value, value)
     sleep 2
   end
 
@@ -46,6 +46,10 @@ class OperationSelenium
 
   def self.research_left_bike
     PORT_LIST.each do |key, value|
+      # ここはダサいのでのちに直す
+      if key == "ginzasquea"
+        return
+      end
       info = @@driver.find_element(:xpath, value).text
       port_name = info.split("\n")[0]
       reft_bikes = info.split("\n")[2]
