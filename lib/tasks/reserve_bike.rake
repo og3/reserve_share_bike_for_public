@@ -10,17 +10,12 @@ namespace :reserve_bike do
     if morning_execution_time_1 || morning_execution_time_2 || evening_execution_time
       OperationSelenium.starting_headless_chrome
       OperationSelenium.login_to_with_reserve_account
-      OperationSelenium.get_to_port_list_in_chuouku
       if morning_execution_time_1 || morning_execution_time_2
+        OperationSelenium.get_to_port_list_in_chuouku("AreaID", "2")
         OperationSelenium.select_port("hamachogawa")
       else
-        # 帰りの自転車に関しては処理を分けていく予定
-        select = Selenium::WebDriver::Support::Select.new(driver.find_element(:id, 'Location'))
-        select.select_by(:value, '銀座・築地/Ginza・Tsukiji')
-        sleep 2
-        # 銀座スクエアを指定
-        driver.find_element(:xpath, '//*[@id="wrapper_jqm"]/div[1]/div[1]/div[2]/div[4]/div/div[1]/form[2]/div/div/a').click
-        sleep 2
+        OperationSelenium.get_to_port_list_in_chuouku("Location", "銀座・築地/Ginza・Tsukiji")
+        OperationSelenium.select_port("ginzasquea")
       end
       OperationSelenium.select_bike
       OperationSelenium.quit_driver
