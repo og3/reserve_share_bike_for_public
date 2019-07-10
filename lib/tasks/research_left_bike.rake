@@ -7,10 +7,8 @@ namespace :research_left_bike do
     if execution_time
       OperationSelenium.starting_headless_chrome
       OperationSelenium.login_to_with_reserve_account
-      OperationSelenium.get_to_port_list_in_chuouku
+      OperationSelenium.get_to_port_list_in_chuouku("AreaID", "2")
       OperationSelenium.research_left_bike
-      puts "全ての動作が正常に行われました"
-      # ブラウザを終了
       OperationSelenium.quit_driver
     end
   end

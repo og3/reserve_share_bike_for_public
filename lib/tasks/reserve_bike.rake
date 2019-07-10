@@ -10,11 +10,11 @@ namespace :reserve_bike do
     if morning_execution_time_1 || morning_execution_time_2 || evening_execution_time
       OperationSelenium.starting_headless_chrome
       OperationSelenium.login_to_with_reserve_account
+      OperationSelenium.get_to_port_list_in_chuouku("AreaID", "2")
       if morning_execution_time_1 || morning_execution_time_2
-        OperationSelenium.get_to_port_list_in_chuouku("AreaID", "2")
         OperationSelenium.select_port("hamachogawa")
       else
-        OperationSelenium.get_to_port_list_in_chuouku("Location", "銀座・築地/Ginza・Tsukiji")
+        OperationSelenium.select_location("Location", "銀座・築地/Ginza・Tsukiji")
         OperationSelenium.select_port("ginzasquea")
       end
       OperationSelenium.select_bike
