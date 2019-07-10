@@ -39,6 +39,12 @@ class OperationSelenium
     sleep 2
   end
 
+  # 「場所を選ぶ」のプルダウンを操作する
+  def self.select_location(id, value)
+    select = Selenium::WebDriver::Support::Select.new(@@driver.find_element(:id, id))
+    select.select_by(:value, value)
+  end
+
   def self.select_port(port_key)
     @@driver.find_element(:xpath, PORT_LIST[port_key]).click
     sleep 2
@@ -48,7 +54,7 @@ class OperationSelenium
     PORT_LIST.each do |key, value|
       # ここはダサいのでのちに直す
       if key == "ginzasquea"
-        return
+        break
       end
       info = @@driver.find_element(:xpath, value).text
       port_name = info.split("\n")[0]
